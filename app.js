@@ -24,7 +24,6 @@ const cors = require("cors");
 // Object to store known users.
 var users = {};
 
-
 app.use(cors());
 // Parse application/x-www-form-urlencoded
 app.use(
@@ -63,11 +62,11 @@ app.get("/", function(_req, res) {
 app.get("/webhook", (req, res) => {
   // Parse the query params
   console.log("Got /webhook");
-  let mode = req.query["hub_mode"];
-  let token = req.query["hub_verify_token"];
-  let challenge = req.query["hub_challenge"];
-
-
+  let mode = req.query["hub.mode"];
+  let token = req.query["hub.verify_token"];
+  let challenge = req.query["hub.challenge"];
+  console.log("***************************");
+  console.log(mode,token,challenge);
   // Check if a token and mode is in the query string of the request
   if (mode && token) {
     // Checks the mode and token sent is correct
@@ -82,6 +81,7 @@ app.get("/webhook", (req, res) => {
   } else {
     console.warn("Got /webhook but without needed parameters.");
   }
+  console.log("***************************");
 });
 
 // Add support for POST requests to our webhook
