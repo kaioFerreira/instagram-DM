@@ -19,10 +19,13 @@ const express = require("express"),
   config = require("./services/config"),
   i18n = require("./i18n.config"),
   app = express();
+const cors = require("cors");
 
 // Object to store known users.
 var users = {};
 
+
+app.use(cors());
 // Parse application/x-www-form-urlencoded
 app.use(
   urlencoded({
