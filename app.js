@@ -128,6 +128,12 @@ app.post("/webhook", (req, res) => {
 
         // Get the sender IGSID
         let senderIgsid = webhookEvent.sender.id;
+        console.log("senderIgsid");
+        console.log(senderIgsid);
+
+        senderIgsid = webhookEvent.sender[0].id;
+        console.log("senderIgsid222222222");
+        console.log(senderIgsid);
         // KAIO
         console.log("Usersssssss:");
         console.log(users);
