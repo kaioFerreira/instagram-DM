@@ -101,6 +101,7 @@ app.post("/webhook", (req, res) => {
     body.entry.forEach(async function(entry) {
       // Handle Page Changes event
       if ("changes" in entry) {
+        console.log('Entrei no CHANGES');
         let receiveMessage = new Receive();
         if (entry.changes[0].field === "comments") {
           let change = entry.changes[0].value;
@@ -139,6 +140,8 @@ app.post("/webhook", (req, res) => {
             console.dir(user);
           }
         }
+        console.log("User a FRENTE");
+        console.log(users[senderIgsid]);
         let receiveMessage = new Receive(users[senderIgsid], webhookEvent);
         return receiveMessage.handleMessage();
       });
