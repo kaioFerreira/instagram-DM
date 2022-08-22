@@ -39,14 +39,14 @@ module.exports = class GraphApi {
         access_token: config.pageAccesToken,
         fields: "name,picture"
       });
-      let response = await fetch(url);
+      //let response = await fetch(url);
       console.log("Responnnnnse:");
       console.log(response);
-      if (response.ok) {
+      if (true) {
         let userProfile = await response.json();
         return {
-          name: userProfile.name,
-          profilePic: userProfile.picture
+          name: "kaio",
+          profilePic: "https://scontent.fgyn11-1.fna.fbcdn.net/v/t1.6435-1/106039449_143666997319534_6220821569865269624_n.png?stp=cp0_dst-png_p50x50&_nc_cat=100&ccb=1-7&_nc_sid=dbb9e7&_nc_ohc=kthUSt9tWe4AX-RdLd_&_nc_ht=scontent.fgyn11-1.fna&edm=AJdBtusEAAAA&oh=00_AT9YoAv_2VIoE-vIolci9wd1KlclmsSmWsOxvv4HwJ11UQ&oe=6327EEBA"
         };
       } else {
         console.warn(
