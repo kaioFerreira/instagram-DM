@@ -45,8 +45,8 @@ module.exports = class GraphApi {
       if (true) {
         let userProfile = await response.json();
         return {
-          name: "kaio",
-          profilePic: {
+          "name": "kaio",
+          "profilePic": {
             "data": {
               "height": 50,
               "is_silhouette": false,
