@@ -46,7 +46,14 @@ module.exports = class GraphApi {
         let userProfile = await response.json();
         return {
           name: "kaio",
-          profilePic: "https://scontent.fgyn11-1.fna.fbcdn.net/v/t1.6435-1/106039449_143666997319534_6220821569865269624_n.png?stp=cp0_dst-png_p50x50&_nc_cat=100&ccb=1-7&_nc_sid=dbb9e7&_nc_ohc=kthUSt9tWe4AX-RdLd_&_nc_ht=scontent.fgyn11-1.fna&edm=AJdBtusEAAAA&oh=00_AT9YoAv_2VIoE-vIolci9wd1KlclmsSmWsOxvv4HwJ11UQ&oe=6327EEBA"
+          profilePic: {
+            "data": {
+              "height": 50,
+              "is_silhouette": false,
+              "url": "https://scontent.fgyn11-1.fna.fbcdn.net/v/t1.6435-1/106039449_143666997319534_6220821569865269624_n.png?stp=cp0_dst-png_p50x50&_nc_cat=100&ccb=1-7&_nc_sid=dbb9e7&_nc_ohc=kthUSt9tWe4AX-RdLd_&_nc_ht=scontent.fgyn11-1.fna&edm=AJdBtusEAAAA&oh=00_AT9YoAv_2VIoE-vIolci9wd1KlclmsSmWsOxvv4HwJ11UQ&oe=6327EEBA",
+              "width": 50
+            }
+          }
         };
       } else {
         console.warn(
