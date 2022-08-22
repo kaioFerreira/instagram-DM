@@ -127,7 +127,7 @@ app.post("/webhook", (req, res) => {
 
         // Get the sender IGSID
         let senderIgsid = webhookEvent.sender.id;
-
+        // KAIO
         if (!(senderIgsid in users)) {
           // First time seeing this user
           let user = new User(senderIgsid);

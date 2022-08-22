@@ -235,7 +235,7 @@ module.exports = class Receive {
     // Construct the message body
     let requestBody = {
       recipient: {
-        id: this.user.igsid
+        id: this.user.id
       },
       message: response
     };
