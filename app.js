@@ -22,7 +22,7 @@ const express = require("express"),
 const cors = require("cors");
 
 // Object to store known users.
-var users = {};
+let users = {};
 
 app.use(cors());
 // Parse application/x-www-form-urlencoded

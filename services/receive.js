@@ -29,6 +29,8 @@ module.exports = class Receive {
   handleMessage() {
     let event = this.webhookEvent;
 
+    console.log('WEEEEEEBHOOK:');
+    console.log(this.webhookEvent);
     let responses;
 
     try {
@@ -57,6 +59,8 @@ module.exports = class Receive {
       };
     }
 
+    console.log("Response22222");
+    console.log(responses);
     if (!responses) {
       return;
     }
@@ -122,7 +126,8 @@ module.exports = class Receive {
         ])
       ];
     }
-
+    console.log("RESPONSE:::");
+    console.log(response);
     return response;
   }
 
@@ -221,7 +226,7 @@ module.exports = class Receive {
       message: Response.genText(i18n.__("private_reply.post")),
       tag: "HUMAN_AGENT"
     };
-
+    
     GraphApi.callSendApi(requestBody);
   }
 
@@ -232,10 +237,12 @@ module.exports = class Receive {
       delete response["delay"];
     }
 
+    console.log("RecipientUSER:");
+    console.log(this.user);
     // Construct the message body
     let requestBody = {
       recipient: {
-        id: this.user.id
+        id: this.user.igsid
       },
       message: response
     };
