@@ -15,8 +15,8 @@
 	},
 	"get_started": {
 		"welcome": "Hi {{userName}}! Welcome to Original Coast Clothing where you'll find styles for every occasion.",
-		"guidance": "At any time, use the menu below to navigate through the features",
-		"help": "What we can do to help you today?"
+		"guidance": "",
+		"help": ""
 	},
 	"curation": {
 		"prompt": "Hello {{userName}}, we have some exciting new products out, which product line do you want to learn more about?",
@@ -58,7 +58,7 @@
 		"suggestion": "Your suggestion has been recorded for future review by the team. If this is something we need to get back to you right now just comment \"help\""
 	},
 	"fallback": {
-		"any": "Sorry, but I don’t recognize \"{{message}}\".",
+		"any": "{{message}}",
 		"attachment": "Thanks for sending this attachment, we can connect you to an agent to review it or we can start over"
 	}
 }

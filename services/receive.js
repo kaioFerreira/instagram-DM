@@ -79,7 +79,7 @@ module.exports = class Receive {
   // Handles messages events with text
   handleTextMessage() {
     console.log(
-      `Received text from user '${this.user.name}' (${this.user.igsid}):\n`,
+      `Received text from user '${this.user.name}' (${this.user.id}):\n`,
       this.webhookEvent.message.text
     );
 
@@ -137,7 +137,7 @@ module.exports = class Receive {
 
     // Get the attachment
     let attachment = this.webhookEvent.message.attachments[0];
-    console.log("Received attachment:", `${attachment} for ${this.user.igsid}`);
+    console.log("Received attachment:", `${attachment} for ${this.user.id}`);
 
     response = Response.genQuickReply(i18n.__("fallback.attachment"), [
       {
@@ -185,7 +185,7 @@ module.exports = class Receive {
   }
 
   handlePayload(payload) {
-    console.log(`Received Payload: ${payload} for user ${this.user.igsid}`);
+    console.log(`Received Payload: ${payload} for user ${this.user.id}`);
 
     let response;
 
@@ -242,7 +242,7 @@ module.exports = class Receive {
     // Construct the message body
     let requestBody = {
       recipient: {
-        id: this.user.igsid
+        id: this.user.id
       },
       message: response
     };

@@ -37,11 +37,15 @@
      let url = new URL(`${config.apiUrl}/${senderIgsid}`);
      url.search = new URLSearchParams({
        access_token: config.pageAccesToken,
-       fields: "name,profile_pic"
+       fields: "name,picture"
      });
      let response = await fetch(url);
+     console.log("RESPONSE:");
+     console.log(response);
      if (response.ok) {
        let userProfile = await response.json();
+      console.log("userProfile:");
+      console.log(userProfile);
        return {
          name: userProfile.name,
          profilePic: userProfile.profile_pic

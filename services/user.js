@@ -9,8 +9,8 @@
 "use strict";
 
 module.exports = class User {
-  constructor(igsid) {
-    this.igsid = igsid;
+  constructor(id) {
+    this.id = id;
     this.name = "";
     this.profilePic = "";
   }
