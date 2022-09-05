@@ -2,21 +2,27 @@
 	"profile": {
 		"greeting": "Welcome to Original Coast Clothing {{userName}}! Click get started to enjoy our sample automated messaging experience. If you want to build a similar one visit https://fb.me/get-sample-oc-ig"
 	},
+	"atendimento": {
+		"support": "socore nós",
+		"order": "Ta querendo oque bb?",
+		"help": "Ajuda eu PAI"
+	},
 	"menu": {
 		"support": "Customer Support",
 		"order": "Where is my order?",
-		"help": "Reach Product Expert",
-		"suggestion": "New Products",
+		"help": "Suporte Tecnico",
+		"atendente": "Falar com Atendente",
+		"suggestion": "Emitir Boleto",
 		"shop": "Shop now",
-		"start_over": "Start over"
+		"start_over": "Menu Inicial"
 	},
 	"private_reply": {
 		"post": "Thanks for liking our post! This is as far as the demo goes. In a production experience, this message would come from a human agent. See https://fb.me/get-sample-oc-ig to learn how to build a similar experience."
 	},
 	"get_started": {
-		"welcome": "Hi {{userName}}! Welcome to Original Coast Clothing where you'll find styles for every occasion.",
-		"guidance": "",
-		"help": ""
+		"welcome": "Oie {{userName}}! Bem-vindo ao nosso canal de atendimento.",
+		"guidance": "A qualquer momento, use o menu abaixo para navegar pelos recursos",
+		"help": "O que podemos fazer para ajudá-lo hoje?"
 	},
 	"curation": {
 		"prompt": "Hello {{userName}}, we have some exciting new products out, which product line do you want to learn more about?",
@@ -58,7 +64,8 @@
 		"suggestion": "Your suggestion has been recorded for future review by the team. If this is something we need to get back to you right now just comment \"help\""
 	},
 	"fallback": {
-		"any": "{{message}}",
+		"message": "{{message}}",
+		"any": "Sorry, but I don’t recognize \"{{message}}\".",
 		"attachment": "Thanks for sending this attachment, we can connect you to an agent to review it or we can start over"
 	}
 }
