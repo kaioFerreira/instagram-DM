@@ -234,24 +234,33 @@
      GraphApi.callSendApi(requestBody);
    }
  
-   sendMessage(response, delay = 0) {
-     // Check if there is delay in the response
-     if ("delay" in response) {
-       delay = response["delay"];
-       delete response["delay"];
-     }
- 
-     console.log("RecipientUSER:");
-     console.log(this.user);
-     // Construct the message body
-     let requestBody = {
-       recipient: {
-         id: this.user.id
-       },
-       message: response
-     };
- 
-     setTimeout(() => GraphApi.callSendApi(requestBody), delay);
-   }
- };
+  sendMessage(response, delay = 0) {
+
+    try {
+      
+      
+      // Check if there is delay in the response
+      if ("delay" in response) {
+        delay = response["delay"];
+        delete response["delay"];
+      }
+      
+      console.log("RecipientUSER:");
+      console.log(this.user);
+      // Construct the message body
+      let requestBody = {
+        recipient: {
+          id: this.user.id
+      },
+      message: response
+    };
+    
+    setTimeout(() => GraphApi.callSendApi(requestBody), delay);
+    
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+};
 
