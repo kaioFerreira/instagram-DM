@@ -169,7 +169,7 @@ app.post("/webhook", (req, res) => {
 function verifyRequestSignature(req, res, buf) {
   console.log("New REQUEST");
   const signature = req.headers["x-hub-signature"];
-
+  console.log("SIGNATURE",signature);
   if (!signature) {
     console.warn(`Couldn't find "x-hub-signature" in headers.`);
   } else {
