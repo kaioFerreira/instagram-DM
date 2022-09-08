@@ -65,12 +65,11 @@ app.get("/webhook", (req, res) => {
   let mode = req.query["hub.mode"];
   let token = req.query["hub.verify_token"];
   let challenge = req.query["hub.challenge"];
-  console.log("***************************");
-  console.log(mode,token,challenge);
+
   // Check if a token and mode is in the query string of the request
   if (mode && token) {
     // Checks the mode and token sent is correct
-    if (token === config.verifyToken) {
+    if (mode === "subscribe" && token === config.verifyToken) {
       // Responds with the challenge token from the request
       console.log("WEBHOOK_VERIFIED");
       res.status(200).send(challenge);
@@ -81,7 +80,6 @@ app.get("/webhook", (req, res) => {
   } else {
     console.warn("Got /webhook but without needed parameters.");
   }
-  console.log("***************************");
 });
 
 // Add support for POST requests to our webhook
