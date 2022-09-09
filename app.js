@@ -82,8 +82,34 @@ app.get("/webhook", (req, res) => {
   }
 });
 
+
 // Add support for POST requests to our webhook
 // Called whenever messages occur in the conversation.
+
+/*
+
+ {
+   object: 'page',
+   entry: [
+     {
+       id: '114738226879078',
+       time: 1662720100796,
+       messaging: [
+         {
+           sender: { id: '5651039768280043' },
+           recipient: { id: '114738226879078' },
+           timestamp: 1662719729433,
+           message: {
+             mid: 'm_bnq89Oxr0M9m5eXsqVrjG3vzr5BCWRCsUP2P5U3rCIdefFN9HrCZtTByg2xpqMvqLJZLXoc65VC8NdZqJiEWcw',
+             text: 'Show'
+           }
+         }
+       ]
+     }
+   ]
+ }
+
+*/
 app.post("/webhook", (req, res) => {
   let body = req.body;
 
@@ -152,6 +178,60 @@ app.post("/webhook", (req, res) => {
     });
   } else if (body.object === "page") {
     // Catch if the event came from Messenger webhook instead of Instagram
+
+    body.entry.forEach(async function(entry) {
+      // Handle Page Changes event
+      if ("changes" in entry) {
+        console.log('Entrei no CHANGES');
+        let receiveMessage = new Receive();
+        if (entry.changes[0].field === "comments") {
+          let change = entry.changes[0].value;
+          if (entry.changes[0].value) console.log("Got a comments event");
+          return receiveMessage.handlePrivateReply("comment_id", change.id);
+        }
+      }
+
+      if (!("messaging" in entry)) {
+        console.warn("No messaging field in entry. Possibly a webhook test.");
+        return;
+      }
+
+      // Iterate over webhook events - there may be multiple
+      entry.messaging.forEach(async function(webhookEvent) {
+        // Discard uninteresting events
+        if (
+          "message" in webhookEvent &&
+          webhookEvent.message.is_echo === true
+        ) {
+          console.log("Got an echo");
+          return;
+        }
+
+        // Get the sender IGSID
+        let senderIgsid = webhookEvent.sender.id;
+        console.log("senderIgsid");
+        console.log(senderIgsid);
+
+        // KAIO
+        console.log("Usersssssss:");
+        console.log(users);
+        if (!(senderIgsid in users)) {
+          // First time seeing this user
+          let user = new User(senderIgsid);
+          let userProfile = await GraphApi.getUserProfile(senderIgsid);
+          if (userProfile) {
+            user.setProfile(userProfile);
+            users[senderIgsid] = user;
+            console.log(`Created new user profile`);
+            console.dir(user);
+          }
+        }
+        console.log("User a FRENTE");
+        console.log(users[senderIgsid]);
+        let receiveMessage = new Receive(users[senderIgsid], webhookEvent);
+        return receiveMessage.handleMessage();
+      });
+    });
     console.warn(
       `Received Messenger "page" object instead of "instagram" message webhook.`
     );
