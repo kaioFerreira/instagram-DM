@@ -37,7 +37,7 @@
      let url = new URL(`${config.apiUrl}/${senderIgsid}`);
      url.search = new URLSearchParams({
        access_token: config.pageAccesToken,
-       fields: "name,picture"
+       fields: "name,profile_pic"
      });
      let response = await fetch(url);
      console.log("RESPONSE:");
