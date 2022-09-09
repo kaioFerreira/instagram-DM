@@ -29,8 +29,6 @@
    handleMessage() {
      let event = this.webhookEvent;
  
-     console.log('WEEEEEEBHOOK:');
-     console.log(this.webhookEvent);
      let responses;
  
      try {
@@ -59,8 +57,6 @@
        };
      }
  
-     console.log("Response22222");
-     console.log(responses);
      if (!responses) {
        return;
      }
@@ -79,7 +75,7 @@
    // Handles messages events with text
    handleTextMessage() {
      console.log(
-       `Received text from user '${this.user.name}' (${this.user.id}):\n`,
+       `Received text from user '${this.user.name}' (${this.user.igsid}):\n`,
        this.webhookEvent.message.text
      );
  
@@ -102,9 +98,13 @@
      } else if (message.includes(i18n.__("care.help").toLowerCase())) {
        let care = new Care(this.user, this.webhookEvent);
        response = care.handlePayload("CARE_HELP");
-     } else if (message.includes("menu")){
+     } else {
        response = [
- 
+         Response.genText(
+           i18n.__("fallback.any", {
+             message: this.webhookEvent.message.text
+           })
+         ),
          Response.genText(i18n.__("get_started.guidance")),
          Response.genQuickReply(i18n.__("get_started.help"), [
            {
@@ -121,17 +121,8 @@
            }
          ])
        ];
-     } else {
-      response = Response.genText(
-        i18n.__("fallback.message", {
-          message: this.webhookEvent.message.text
-        })
-      );
-       console.log("foiii");
      }
  
-     console.log("RESPONSE:::");
-     console.log(response);
      return response;
    }
  
@@ -141,7 +132,7 @@
  
      // Get the attachment
      let attachment = this.webhookEvent.message.attachments[0];
-     console.log("Received attachment:", `${attachment} for ${this.user.id}`);
+     console.log("Received attachment:", `${attachment} for ${this.user.igsid}`);
  
      response = Response.genQuickReply(i18n.__("fallback.attachment"), [
        {
@@ -189,7 +180,7 @@
    }
  
    handlePayload(payload) {
-     console.log(`Received Payload: ${payload} for user ${this.user.id}`);
+     console.log(`Received Payload: ${payload} for user ${this.user.igsid}`);
  
      let response;
  
@@ -230,37 +221,25 @@
        message: Response.genText(i18n.__("private_reply.post")),
        tag: "HUMAN_AGENT"
      };
-     
+ 
      GraphApi.callSendApi(requestBody);
    }
  
-  sendMessage(response, delay = 0) {
-
-    try {
-      
-      
-      // Check if there is delay in the response
-      if ("delay" in response) {
-        delay = response["delay"];
-        delete response["delay"];
-      }
-      
-      console.log("RecipientUSER:");
-      console.log(this.user);
-      // Construct the message body
-      let requestBody = {
-        recipient: {
-          id: this.user.id
-      },
-      message: response
-    };
-    
-    setTimeout(() => GraphApi.callSendApi(requestBody), delay);
-    
-    } catch (error) {
-      console.log(error)
-    }
-
-  }
-};
-
+   sendMessage(response, delay = 0) {
+     // Check if there is delay in the response
+     if ("delay" in response) {
+       delay = response["delay"];
+       delete response["delay"];
+     }
+ 
+     // Construct the message body
+     let requestBody = {
+       recipient: {
+         id: this.user.igsid
+       },
+       message: response
+     };
+ 
+     setTimeout(() => GraphApi.callSendApi(requestBody), delay);
+   }
+ };
