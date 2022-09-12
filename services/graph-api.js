@@ -63,15 +63,18 @@
      url.search = new URLSearchParams({
        access_token: config.pageAccesToken
      });
+
      let json = {
        platform: "instagram",
        ice_breakers: iceBreakers
      };
+
      let response = await fetch(url, {
        method: "POST",
        headers: { "Content-Type": "application/json" },
        body: JSON.stringify(json)
      });
+     
      if (response.ok) {
        console.log(`Icebreakers have been set.`);
      } else {
