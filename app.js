@@ -86,30 +86,27 @@ app.get("/webhook", (req, res) => {
 
 // Add support for POST requests to our webhook
 // Called whenever messages occur in the conversation.
-
 /*
-
- {
+{
    object: 'page',
    entry: [
      {
        id: '114738226879078',
-       time: 1662720100796,
-       messaging: [
-         {
-           sender: { id: '5651039768280043' },
-           recipient: { id: '114738226879078' },
-           timestamp: 1662719729433,
-           message: {
-             mid: 'm_bnq89Oxr0M9m5eXsqVrjG3vzr5BCWRCsUP2P5U3rCIdefFN9HrCZtTByg2xpqMvqLJZLXoc65VC8NdZqJiEWcw',
-             text: 'Show'
-           }
-         }
-       ]
-     }
-   ]
- }
-
+      time: 1663001769635,
+      messaging: [
+        {
+          sender: { id: '5651039768280043' },
+          recipient: { id: '114738226879078' },
+          timestamp: 1663001627811,
+          message: {
+            mid: 'm_6RQ0rblmVIdPybQ7doZCQXvzr5BCWRCsUP2P5U3rCIfZSPkraH7dWvM5y7uYPfJcBPk86dFZhzJl-qf7vQeYkQ',
+            text: 'Debreix'
+          }
+        }
+      ]
+    }
+  ]
+}
 */
 app.post("/webhook", (req, res) => {
   let body = req.body;
@@ -178,7 +175,8 @@ app.post("/webhook", (req, res) => {
       });
     });
   } else if (body.object === "page") {
-    // Catch if the event came from Messenger webhook instead of Instagram
+    // Return a '200 OK' response to all requests
+    res.status(200).send("EVENT_RECEIVED");
 
     body.entry.forEach(async function(entry) {
       // Handle Page Changes event
