@@ -209,12 +209,7 @@ app.post("/webhook", (req, res) => {
 
         // Get the sender IGSID
         let senderIgsid = webhookEvent.sender.id;
-        console.log("senderIgsid");
-        console.log(senderIgsid);
 
-        // KAIO
-        console.log("Usersssssss:");
-        console.log(users);
         if (!(senderIgsid in users)) {
           // First time seeing this user
           let user = new User(senderIgsid);
@@ -246,7 +241,6 @@ app.post("/webhook", (req, res) => {
 function verifyRequestSignature(req, res, buf) {
   console.log("New REQUEST");
   const signature = req.headers["x-hub-signature"];
-  console.log("SIGNATURE",signature);
   if (!signature) {
     console.warn(`Couldn't find "x-hub-signature" in headers.`);
   } else {
@@ -325,7 +319,7 @@ async function main() {
   await GraphApi.setPageSubscriptions();
 
   // Listen for requests :)
-  var listener = app.listen(config.port, function() {
+  let listener = app.listen(config.port, function() {
     console.log(`The app is listening on port ${listener.address().port}`);
   });
 }
