@@ -232,10 +232,9 @@ app.post("/webhook", (req, res) => {
         return receiveMessage.handleMessage();
       });
     });
-    console.warn(
+    console.log(
       `Received Messenger "page" object instead of "instagram" message webhook.`
     );
-    res.sendStatus(404);
   } else {
     // Return a '404 Not Found' if event is not recognized
     console.warn(`Unrecognized POST to webhook.`);
