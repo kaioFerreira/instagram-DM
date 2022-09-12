@@ -29,6 +29,7 @@
    handleMessage() {
      let event = this.webhookEvent;
  
+     console.log("handleMessage",event);
      let responses;
  
      try {
@@ -74,10 +75,7 @@
  
    // Handles messages events with text
    handleTextMessage() {
-     console.log(
-       `Received text from user '${this.user.name}' (${this.user.id}):\n`,
-       this.webhookEvent.message.text
-     );
+     console.log(`Received text from User: '${this.user.name}' Id: (${this.user.id}) \nMessage: ${this.webhookEvent.message.text}`);
  
      let message = this.webhookEvent.message.text.trim().toLowerCase();
  
@@ -98,7 +96,7 @@
      } else if (message.includes(i18n.__("care.help").toLowerCase())) {
        let care = new Care(this.user, this.webhookEvent);
        response = care.handlePayload("CARE_HELP");
-     } else {
+     } else if (message.includes("alertaVirtual")){
        response = [
          Response.genText(
            i18n.__("fallback.any", {
@@ -121,6 +119,8 @@
            }
          ])
        ];
+     } else {
+      response = undefined;
      }
  
      return response;
