@@ -38,6 +38,7 @@ app.use(json({ verify: verifyRequestSignature }));
 // Serving static files in Express
 app.use(express.static(path.join(path.resolve(), "public")));
 
+/*
 // Find the URL we're serving from
 app.all("*", function(req, res, next) {
   // "x-forwarded-proto" will have https even when tunnelling to local
@@ -50,7 +51,7 @@ app.all("*", function(req, res, next) {
     console.log(`Updated appUrl to ${config.appUrl}`);
   }
   next();
-});
+});*/
 
 // Respond with index file when a GET request is made to the homepage
 app.get("/", function(_req, res) {
