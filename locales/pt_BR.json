@@ -1,0 +1,64 @@
+{
+	"profile": {
+		"greeting": "Bem-vindo à Original Coast Clothing {{userName}}! Clique em começar para aproveitar nossa amostra de experiência de mensagens automáticas. Se você quiser criar uma semelhante, visite https://fb.me/get-sample-oc- ig"
+	},
+	"menu": {
+		"support": "Suporte ao cliente",
+		"order": "Onde está meu pedido?",
+		"help": "Alcançar Especialista em Produtos",
+		"suggestion": "Novos Produtos",
+		"shop": "Compre agora",
+		"start_over": "Start over"
+	},
+	"private_reply": {
+		"post": "Obrigado por gostar do nosso post! Este é o máximo da demonstração. Em uma experiência de produção, esta mensagem viria de um agente humano. Veja https://fb.me/get-sample-oc-ig para aprender a construir uma experiência semelhante."
+	},
+	"get_started": {
+		"welcome": "Olá {{userName}}! Bem-vindo à Original Coast Clothing, onde você encontrará estilos para todas as ocasiões.",
+		"guidance": "A qualquer momento, use o menu abaixo para navegar pelos recursos",
+		"help": "O que podemos fazer para ajudá-lo hoje?"
+	},
+	"curation": {
+		"prompt": "Olá {{userName}}, temos alguns novos produtos interessantes, sobre qual linha de produtos você deseja saber mais?",
+		"occasion": "Ótimo! Vamos começar. Primeiro, há uma ocasião em mente?",
+		"work": "Trabalho",
+		"dinner": "Jantar",
+		"party": "Festa",
+		"sales": "Alcançar Especialista em Produtos",
+		"shop": "Compre este look",
+		"title": "Coleção de verão 2021",
+		"subtitle": "Roupa em destaque",
+		"anything_else": "Posso ajudá-lo com mais alguma coisa?",
+		"about": "Informações do produto",
+		"product_information": "Usamos fios de algodão orgânico e ecológicos populares e difíceis de encontrar."
+	},
+	"order": {
+		"prompt": "Teremos prazer em ajudá-lo. Selecione uma das seguintes opções",
+		"search": "Pesquisar pelo número do pedido",
+		"searching": "Procurando seu último pedido...",
+		"number": "Obrigado por entrar em contato! Estamos felizes em ajudar. Você pode confirmar o número do seu pedido?",
+		"status": "Seu pedido está a caminho, esperamos recebê-lo em 3 dias."
+	},
+	"care": {
+		"prompt": "Olá {{userName}}, como podemos ajudá-lo hoje?",
+		"order": "Dúvidas sobre pedidos",
+		"billing": "Problemas de cobrança",
+		"other": "Outro",
+		"issue": "Olá {{userName}}, meu nome é {{agentFirstName}}, estou aqui para ajudá-lo com qualquer dúvida que possa ter sobre seu {{topic}}.",
+		"default": "Olá {{userName}}, meu nome é {{agentFirstName}}, estou aqui para ajudá-lo hoje. Como posso ajudá-lo?",
+		"style": "Olá {{userName}}, meu nome é {{agentFirstName}}, estou aqui para responder a perguntas que você possa ter sobre nossos estilos de verão",
+		"end": "Este é o máximo da demonstração. Aproveite o poder da plataforma do Instagram para o seu negócio. Consulte https://fb.me/get-sample-oc-ig para saber como criar uma experiência semelhante.",
+		"help": "Ajuda e Suporte"
+	},
+	"survey": {
+		"prompt": "Olá, gostaríamos de receber um feedback rápido sobre sua experiência recente com {{agentFirstName}}",
+		"positive": "Obrigado pelo feedback",
+		"neutral": "Obrigado pelo feedback, se houver algo que devamos melhorar sinta-se à vontade para comentar com #sugestão",
+		"negative": "Obrigado por nos dizer. Desculpe ouvir isso, se houver algo que possamos fazer para mudar isso, avise-nos",
+		"suggestion": "Sua sugestão foi registrada para análise futura pela equipe. Se isso é algo que precisamos entrar em contato com você agora, apenas comente \"ajuda\""
+	},
+	"fallback": {
+		"any": "Desculpe, mas não reconheço \"{{message}}\".",
+		"attachment": "Obrigado por enviar este anexo, podemos conectá-lo a um agente para revisá-lo ou podemos começar de novo"
+	}
+}
