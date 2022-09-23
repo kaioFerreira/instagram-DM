@@ -183,7 +183,7 @@ module.exports = class Receive {
         headers: { 'Content-Type': 'application/json' },
         data: _data
     }).then(res => resolve(res)).catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
-
+    console.log('Finish AXIOS');
 
     return response;
   }
