@@ -108,6 +108,128 @@ app.get("/webhook", (req, res) => {
   ]
 }
 */
+
+
+app.post("/sendMessage", (req, res) => {
+  let body = req.body;
+
+  console.log(body);
+  console.log(`\u{1F7EA} Received webhook:`);
+  console.dir(body, { depth: null });
+
+  // Check if this is an event from a page subscription
+  if (body.object === "instagram") {
+    // Return a '200 OK' response to all requests
+    res.status(200).send("EVENT_RECEIVED");
+
+    // Iterate over each entry - there may be multiple if batched
+    body.entry.forEach(async function(entry) {
+      // Handle Page Changes event
+      if ("changes" in entry) {
+        console.log('Entrei no CHANGES');
+        let receiveMessage = new Receive();
+        if (entry.changes[0].field === "comments") {
+          let change = entry.changes[0].value;
+          if (entry.changes[0].value) console.log("Got a comments event");
+          return receiveMessage.handlePrivateReply("comment_id", change.id);
+        }
+      }
+
+      if (!("messaging" in entry)) {
+        console.warn("No messaging field in entry. Possibly a webhook test.");
+        return;
+      }
+
+      // Iterate over webhook events - there may be multiple
+      entry.messaging.forEach(async function(webhookEvent) {
+        // Discard uninteresting events
+        if (
+          "message" in webhookEvent &&
+          webhookEvent.message.is_echo === true
+        ) {
+          console.log("Got an echo");
+          return;
+        }
+
+        // Get the sender IGSID
+        let senderIgsid = webhookEvent.sender.id;
+        console.log("senderIgsid");
+        console.log(senderIgsid);
+
+        // KAIO
+        console.log("Usersssssss:");
+        console.log(users);
+        if (!(senderIgsid in users)) {
+          // First time seeing this user
+          let user = new User(senderIgsid);
+          let userProfile = await GraphApi.getUserProfile(senderIgsid);
+          if (userProfile) {
+            user.setProfile(userProfile);
+            users[senderIgsid] = user;
+            console.log(`Created new user profile`);
+            console.dir(user);
+          }
+        }
+        console.log("User a FRENTE");
+        console.log(users[senderIgsid]);
+        let receiveMessage = new Receive(users[senderIgsid], webhookEvent);
+        return receiveMessage.handleMessage();
+      });
+    });
+  } else if (body.object === "page") {
+    // Return a '200 OK' response to all requests
+    res.status(200).send("EVENT_RECEIVED");
+
+    body.entry.forEach(async function(entry) {
+
+      if (!("messaging" in entry)) {
+        console.warn("No messaging field in entry. Possibly a webhook test.");
+        return;
+      }
+
+      // Iterate over webhook events - there may be multiple
+      entry.messaging.forEach(async function(webhookEvent) {
+        // Discard uninteresting events
+        if (
+          "message" in webhookEvent &&
+          webhookEvent.message.is_echo === true
+        ) {
+          console.log("Got an echo");
+          return;
+        }
+
+        // Get the sender IGSID
+        let senderIgsid = webhookEvent.sender.id;
+
+        if (!(senderIgsid in users)) {
+          // First time seeing this user
+          let user = new User(senderIgsid);
+          let userProfile = await GraphApi.getUserProfile(senderIgsid);
+          if (userProfile) {
+            user.setProfile(userProfile);
+            users[senderIgsid] = user;
+            console.log(`Created new user profile`);
+            console.dir(user);
+          }
+        }
+        console.log("User a FRENTE");
+        console.log(users[senderIgsid]);
+
+        let receiveMessage = new Receive(users[senderIgsid], webhookEvent);
+
+        return receiveMessage.sendMessageUser();
+      });
+    });
+    console.log(
+      `Received Messenger "page" object instead of "instagram" message webhook.`
+    );
+  } else {
+    // Return a '404 Not Found' if event is not recognized
+    console.warn(`Unrecognized POST to webhook.`);
+    res.sendStatus(404);
+  }
+});
+
 app.post("/webhook", (req, res) => {
   let body = req.body;
 

@@ -26,7 +26,16 @@ module.exports = class Receive {
     this.webhookEvent = webhookEvent;
   }
 
-  
+  // Envia Mensagem
+  sendMessageUser() {
+    let event = this.webhookEvent;
+    
+    let response = {
+      text: event.message.text
+    };
+    this.sendMessage(response);
+  }
+
   // Check if the event is a message or postback and
   // call the appropriate handler function
   handleMessage() {
@@ -84,11 +93,12 @@ module.exports = class Receive {
     Messenger UltraFoco: 114738226879078
   */
 
+    
+
+
   // Handles messages events with text
   handleTextMessage() {
     console.log(`Received text from User: '${this.user.name}' Id: (${this.user.id}) \nMessage: ${this.webhookEvent.message.text}`);
-
-
 
     let message = this.webhookEvent.message.text.trim().toLowerCase();
 
