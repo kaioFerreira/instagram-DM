@@ -9,6 +9,7 @@
  */
 
 "use strict";
+const axios = require("axios");
 
 const Curation = require("./curation"),
   Order = require("./order"),
@@ -18,12 +19,14 @@ const Curation = require("./curation"),
   GraphApi = require("./graph-api"),
   i18n = require("../i18n.config");
 
+const CONTROLDESK_HOST = process.env.CONTROLDESK_HOST
 module.exports = class Receive {
   constructor(user, webhookEvent) {
     this.user = user;
     this.webhookEvent = webhookEvent;
   }
 
+  
   // Check if the event is a message or postback and
   // call the appropriate handler function
   handleMessage() {
@@ -73,9 +76,19 @@ module.exports = class Receive {
     }
   }
 
+  /* 
+    IG kaio: 5902033573149872 
+    IG UltraFoco: 17841409546930920 
+
+    Messenger kaio: 5651039768280043
+    Messenger UltraFoco: 114738226879078
+  */
+
   // Handles messages events with text
   handleTextMessage() {
     console.log(`Received text from User: '${this.user.name}' Id: (${this.user.id}) \nMessage: ${this.webhookEvent.message.text}`);
+
+
 
     let message = this.webhookEvent.message.text.trim().toLowerCase();
 
@@ -121,6 +134,17 @@ module.exports = class Receive {
     } else {
       response = undefined;
     }
+
+    // Aciona o BackEnd pra adicionar a mensagem ao control
+    /*axios({
+        method: 'post',
+        url: `${CONTROLDESK_HOST}/api/hook`,
+        headers: { 'Content-Type': 'application/json' },
+        data: _data
+    })
+        .then(res => resolve(res))
+        .catch((err) => console.error('Erro ao mandar msg para o controldesk', err))
+*/
 
     return response;
   }
@@ -223,7 +247,7 @@ module.exports = class Receive {
     GraphApi.callSendApi(requestBody);
   }
 
-  sendMessage(response, delay = 0) {
+  sendMessage(response, delay = 0) {  
     // Check if there is delay in the response
     if ("delay" in response) {
       delay = response["delay"];

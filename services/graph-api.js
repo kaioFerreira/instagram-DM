@@ -76,9 +76,9 @@
      });
      
      if (response.ok) {
-       console.log(`Icebreakers have been set.`);
+       console.log(`Icebreakers foram definidos.`);
      } else {
-       console.warn(`Error setting ice breakers`, response.statusText);
+       console.warn(`Erro ao configurar os Icebreakers`, response.statusText);
      }
    }
  
