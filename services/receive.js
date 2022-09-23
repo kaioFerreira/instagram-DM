@@ -33,7 +33,7 @@ module.exports = class Receive {
     let response = {
       text: event.message.text
     };
-    this.sendMessage(response);
+    this.sendMessage(response,5);
   }
 
   // Check if the event is a message or postback and
