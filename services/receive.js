@@ -10,6 +10,7 @@
 
 "use strict";
 const axios = require("axios");
+const uuidv4 = require('uuid')
 
 const Curation = require("./curation"),
   Order = require("./order"),
@@ -93,9 +94,6 @@ module.exports = class Receive {
     Messenger UltraFoco: 114738226879078
   */
 
-    
-
-
   // Handles messages events with text
   handleTextMessage() {
     console.log(`Received text from User: '${this.user.name}' Id: (${this.user.id}) \nMessage: ${this.webhookEvent.message.text}`);
@@ -146,15 +144,46 @@ module.exports = class Receive {
     }
 
     // Aciona o BackEnd pra adicionar a mensagem ao control
-    /*axios({
+    let bot = false
+    let channel = 1000 // quantidade de wpp da empresa
+    let tipo = "text"
+    let idInterno = uuidv4()
+    let url = null // url do arquivo caso exista 
+    let atendente = null // id do atendente
+    let fila = 2
+    let lat = null
+    let lng = null
+    let phone = 5562994767640
+    let celular = null
+
+    let _data = {
+        empresa_id: 2,
+        phone: phone,
+        bot: bot,
+        mensagem: message,
+        bot_url: "http://atendimento.controldesk.com.br:5002",
+        channel: channel,
+        atendente: atendente,
+        fila: fila,
+        cliente: this.user,
+        tipo: tipo,
+        id_interno: idInterno,
+        url: url,
+        lat: lat,
+        lng: lng,
+        celular: celular,
+        timestamp: Date.now(),
+        options: []
+    }
+    
+    console.log('Execute AXIOS');
+    axios({
         method: 'post',
-        url: `${CONTROLDESK_HOST}/api/hook`,
+        url: `${CONTROLDESK_HOST}/api/hooksInstagram`,
         headers: { 'Content-Type': 'application/json' },
         data: _data
-    })
-        .then(res => resolve(res))
-        .catch((err) => console.error('Erro ao mandar msg para o controldesk', err))
-*/
+    }).then(res => resolve(res)).catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
+
 
     return response;
   }
