@@ -16,6 +16,6 @@ module.exports = class User {
   }
   setProfile(profile) {
     this.name = profile.name;
-    this.profilePic = profile.profilePic;
+    this.profilePic = undefined;
   }
 };
