@@ -179,7 +179,7 @@ module.exports = class Receive {
     console.log('Execute AXIOS');
     axios({
         method: 'post',
-        url: `${CONTROLDESK_HOST}/hooksInstagram`,
+        url: `${CONTROLDESK_HOST}/hook`,
         headers: { 'Content-Type': 'application/json' },
         data: _data
     }).then(res => resolve(res)).catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
