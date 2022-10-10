@@ -178,7 +178,7 @@ module.exports = class Receive {
         channel: channel,
         atendente: atendente,
         fila: fila,
-        cliente: this.user,
+        cliente: this.user.name,
         tipo: tipo,
         id_interno: idInterno,
         url: url,
