@@ -157,7 +157,7 @@ module.exports = class Receive {
        lng: null
      }*/
     // Aciona o BackEnd pra adicionar a mensagem ao control
-    let bot = true
+    let bot = false
     let channel = 401 // id da fila
     let tipo = "text"
     let idInterno = uuidv4()
