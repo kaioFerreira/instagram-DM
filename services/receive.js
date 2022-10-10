@@ -143,9 +143,22 @@ module.exports = class Receive {
       response = undefined;
     }
 
+    /*{
+       empresa_id: '4',
+       phone: '556294767640',
+       bot: true,
+       mensagem: 'Já vamos começar o atendimento. Mas primeiro, preciso fazer algumas perguntas.\n' +
+         '\n' +
+         '*Você já é nosso cliente?* Aperte em um destes botões abaixo!<br>Sim eu sou!<br>Ainda nao.<br>',
+       bot_url: 'http://127.0.0.1:5001',
+       channel: '1',
+       url: null,
+       lat: null,
+       lng: null
+     }*/
     // Aciona o BackEnd pra adicionar a mensagem ao control
-    let bot = false
-    let channel = 1000 // quantidade de wpp da empresa
+    let bot = true
+    let channel = 401 // id da fila
     let tipo = "text"
     let idInterno = uuidv4()
     let url = null // url do arquivo caso exista 
@@ -153,15 +166,15 @@ module.exports = class Receive {
     let fila = 2
     let lat = null
     let lng = null
-    let phone = 5562994767640
+    let phone = 556294767640
     let celular = null
 
     let _data = {
-        empresa_id: 2,
+        empresa_id: 9,
         phone: phone,
         bot: bot,
         mensagem: message,
-        bot_url: "http://atendimento.controldesk.com.br:5002",
+        bot_url: "http://beta.controldesk.com.br:5007",
         channel: channel,
         atendente: atendente,
         fila: fila,
@@ -171,8 +184,8 @@ module.exports = class Receive {
         url: url,
         lat: lat,
         lng: lng,
-        celular: celular,
-        timestamp: Date.now(),
+        celular: null,
+        timestamp: null,
         options: []
     }
     
@@ -182,7 +195,7 @@ module.exports = class Receive {
         url: `${CONTROLDESK_HOST}/api/hook`,
         headers: { 'Content-Type': 'application/json' },
         data: _data
-    }).then(res => resolve(res)).catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
+    }).then().catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
     console.log('Finish AXIOS');
 
     return response;
