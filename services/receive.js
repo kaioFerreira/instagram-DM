@@ -157,7 +157,8 @@ module.exports = class Receive {
        lng: null
      }*/
     // Aciona o BackEnd pra adicionar a mensagem ao control
-    let bot = this.webhookEvent.message.bot ? true : false
+    console.log('this.webhookEvent.message.bot', this.webhookEvent.message.bot);
+    let bot = this.webhookEvent.message.bot ? this.webhookEvent.message.bot : false
     let channel = 401 // id da fila
     let tipo = "text"
     let idInterno = uuidv4()
