@@ -156,7 +156,7 @@ module.exports = class Receive {
        lat: null,
        lng: null
      }*/
-
+     
     // Aciona o BackEnd pra adicionar a mensagem ao control
     console.log('this.webhookEvent.bot', this.webhookEvent.bot);
     let bot = this.webhookEvent.bot ? this.webhookEvent.bot : false
@@ -170,7 +170,7 @@ module.exports = class Receive {
     let lng = null
     let phone = 556294767640
     let celular = null
-     /*
+
     let _data = {
         empresa_id: 9,
         phone: phone,
@@ -198,7 +198,7 @@ module.exports = class Receive {
         headers: { 'Content-Type': 'application/json' },
         data: _data
     }).then().catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
-    console.log('Finish AXIOS');*/
+    console.log('Finish AXIOS');
 
     return response;
   }
