@@ -160,7 +160,7 @@ module.exports = class Receive {
     // Aciona o BackEnd pra adicionar a mensagem ao control
     console.log('this.webhookEvent.bot', this.webhookEvent.bot);
     let bot = this.webhookEvent.bot ? this.webhookEvent.bot : false
-    let channel = 401 // id da fila
+    let channel = 601 // id da fila
     let tipo = "text"
     let idInterno = uuidv4()
     let url = null // url do arquivo caso exista 
@@ -176,7 +176,7 @@ module.exports = class Receive {
         phone: phone,
         bot: bot,
         mensagem: message,
-        bot_url: "http://beta.controldesk.com.br:5007",
+        bot_url: "http://dev.controldesk.com.br:5007",
         channel: channel,
         atendente: atendente,
         fila: fila,

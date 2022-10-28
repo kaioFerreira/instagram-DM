@@ -78,6 +78,8 @@ module.exports = class Care {
         break;
 
       case "CARE_SALES":
+
+      
         response = [
           Response.genText(
             i18n.__("care.style", {
