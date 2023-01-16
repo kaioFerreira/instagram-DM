@@ -203,8 +203,6 @@ module.exports = class Receive {
 
     return response;
   }
-
-  
   // Handle mesage events with attachments
   handleAttachmentMessage() {
     let response;
