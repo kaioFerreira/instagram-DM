@@ -24,6 +24,8 @@ const CONTROLDESK_HOST = process.env.CONTROLDESK_HOST
 module.exports = class Receive {
   constructor(user, webhookEvent) {
     this.user = user;
+    this.user.name === undefined ? this.user.name = this.user.username : null;
+    console.log("USER.name", this.user);
     this.webhookEvent = webhookEvent;
   }
 
@@ -168,12 +170,13 @@ module.exports = class Receive {
     let fila = 2
     let lat = null
     let lng = null
-    let phone = 5562994767640
+    let phone = null
     let celular = null
      
+    console.log('this.user.name', this.user.name);
     
     let _data = {
-        empresa_id: 7,
+        empresa_id: 18,
         phone: phone,
         bot: bot,
         mensagem: message,
@@ -189,7 +192,10 @@ module.exports = class Receive {
         lng: lng,
         celular: null,
         timestamp: null,
-        options: []
+        options: [],
+        instagram_id: this.user.id,
+        platform_id: 1,
+        profile_pic: this.user.profile_pic
     }
     
     console.log('Execute AXIOS');

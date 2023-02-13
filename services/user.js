@@ -12,10 +12,13 @@ module.exports = class User {
   constructor(id) {
     this.id = id;
     this.name = "";
-    this.profilePic = "";
+    this.profile_pic = "";
+    this.username = "";
   }
+  
   setProfile(profile) {
     this.name = profile.name;
-    this.profilePic = undefined;
+    this.profile_pic = profile.profile_pic;
+    this.username = profile.username;
   }
 };

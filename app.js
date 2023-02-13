@@ -114,7 +114,7 @@ app.post("/sendMessage", (req, res) => {
   let body = req.body;
 
   console.log(body);
-  console.log(`\u{1F7EA} Received webhook:`);
+  console.log(`\u{1F7EA} Received sendWebhook:`);
   console.dir(body, { depth: null });
 
   // Check if this is an event from a page subscription
@@ -163,6 +163,7 @@ app.post("/sendMessage", (req, res) => {
           // First time seeing this user
           let user = new User(senderIgsid);
           let userProfile = await GraphApi.getUserProfile(senderIgsid);
+          console.log("userProfile",userProfile);
           if (userProfile) {
             user.setProfile(userProfile);
             users[senderIgsid] = user;
@@ -273,16 +274,15 @@ app.post("/webhook", (req, res) => {
 
         // Get the sender IGSID
         let senderIgsid = webhookEvent.sender.id;
-        console.log("senderIgsid");
-        console.log(senderIgsid);
+        console.log("senderIgsid", senderIgsid);
 
-        // KAIO
-        console.log("Usersssssss:");
-        console.log(users);
+        console.log("Usuarios Registrados", users);
+
         if (!(senderIgsid in users)) {
           // First time seeing this user
           let user = new User(senderIgsid);
           let userProfile = await GraphApi.getUserProfile(senderIgsid);
+          console.log("userProfile", userProfile);
           if (userProfile) {
             user.setProfile(userProfile);
             users[senderIgsid] = user;

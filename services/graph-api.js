@@ -37,17 +37,16 @@
      let url = new URL(`${config.apiUrl}/${senderIgsid}`);
      url.search = new URLSearchParams({
        access_token: config.pageAccesToken,
-       fields: "name"
+       fields: "name, username, profile_pic"
      });
      let response = await fetch(url);
-     console.log("RESPONSE:");
-     console.log(response);
      if (response.ok) {
        let userProfile = await response.json();
-      console.log("userProfile:");
-      console.log(userProfile);
+       console.log('[userProfile - KAIO]', userProfile);
        return {
-         name: userProfile.name
+         name: userProfile.name,
+         username: userProfile.username,
+         profile_pic: userProfile.profile_pic
        };
      } else {
        console.warn(
