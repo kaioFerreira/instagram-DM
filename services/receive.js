@@ -10,7 +10,9 @@
 
 "use strict";
 const axios = require("axios");
-const { v4: uuidv4 } = require('uuid');
+const {
+  v4: uuidv4
+} = require('uuid');
 
 const Curation = require("./curation"),
   Order = require("./order"),
@@ -25,18 +27,18 @@ module.exports = class Receive {
   constructor(user, webhookEvent) {
     this.user = user;
     this.user.name === undefined ? this.user.name = this.user.username : null;
-    console.log("USER.name", this.user);
+    // console.log("USER.name", this.user);
     this.webhookEvent = webhookEvent;
   }
 
   // Envia Mensagem
   sendMessageUser() {
     let event = this.webhookEvent;
-    
+
     let response = {
       text: event.message.text
     };
-    this.sendMessage(response,5);
+    this.sendMessage(response, 5);
   }
 
   // Check if the event is a message or postback and
@@ -44,7 +46,7 @@ module.exports = class Receive {
   handleMessage() {
     let event = this.webhookEvent;
 
-    console.log("handleMessage", event);
+    // console.log("handleMessage", event);
     let responses;
 
     try {
@@ -144,7 +146,7 @@ module.exports = class Receive {
     } else {
       response = undefined;
     }
-
+    // console.log("KAIO RESPONSE", response);
     /*{
        empresa_id: '4',
        phone: '556294767640',
@@ -158,7 +160,7 @@ module.exports = class Receive {
        lat: null,
        lng: null
      }*/
-     
+
     // Aciona o BackEnd pra adicionar a mensagem ao control
     console.log('this.webhookEvent.bot', this.webhookEvent.bot);
     let bot = this.webhookEvent.bot ? this.webhookEvent.bot : false
@@ -172,52 +174,54 @@ module.exports = class Receive {
     let lng = null
     let phone = null
     let celular = null
-     
-    console.log('this.user.name', this.user.name);
-    
+
+    // console.log('this.user.name', this.user.name);
+
     let _data = {
-        empresa_id: 18,
-        phone: phone,
-        bot: bot,
-        mensagem: message,
-        bot_url: "http://dev.controldesk.com.br:5007",
-        channel: channel,
-        atendente: atendente,
-        fila: fila,
-        cliente: this.user.name,
-        tipo: tipo,
-        id_interno: idInterno,
-        url: url,
-        lat: lat,
-        lng: lng,
-        celular: null,
-        timestamp: null,
-        options: [],
-        instagram_id: this.user.id,
-        platform_id: 1,
-        profile_pic: this.user.profile_pic
+      empresa_id: 18,
+      phone: phone,
+      bot: bot,
+      mensagem: message,
+      bot_url: "http://dev.controldesk.com.br:5007",
+      channel: channel,
+      atendente: atendente,
+      fila: fila,
+      cliente: this.user.name,
+      tipo: tipo,
+      id_interno: idInterno,
+      url: url,
+      lat: lat,
+      lng: lng,
+      celular: null,
+      timestamp: null,
+      options: [],
+      instagram_id: this.user.id,
+      platform_id: 1,
+      profile_pic: this.user.profile_pic
     }
-    
+
     console.log('Execute AXIOS');
     axios({
-        method: 'post',
-        url: `${CONTROLDESK_HOST}/api/hook`,
-        headers: { 'Content-Type': 'application/json' },
-        data: _data
+      method: 'post',
+      url: `${CONTROLDESK_HOST}/api/hook`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: _data
     }).then().catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
     console.log('Finish AXIOS');
 
     return response;
   }
   // Handle mesage events with attachments
-  handleAttachmentMessage() {
+  async handleAttachmentMessage() {
     let response;
 
     // Get the attachment
     let attachment = this.webhookEvent.message.attachments[0];
     console.log("Received attachment:", `${attachment} for ${this.user.id}`);
 
-    response = Response.genQuickReply(i18n.__("fallback.attachment"), [{
+    /*response = Response.genQuickReply(i18n.__("fallback.attachment"), [{
         title: i18n.__("menu.help"),
         payload: "CARE_HELP"
       },
@@ -225,7 +229,58 @@ module.exports = class Receive {
         title: i18n.__("menu.start_over"),
         payload: "GET_STARTED"
       }
-    ]);
+    ]);*/
+    // Aciona o BackEnd pra adicionar a mensagem ao control
+    console.log('this.webhookEvent.bot', this.webhookEvent.bot);
+    let bot = this.webhookEvent.bot ? this.webhookEvent.bot : false
+    let channel = 401 // id da fila
+    let tipo = this.webhookEvent.message.attachments[0].type === 'image' ? 'img' : this.webhookEvent.message.attachments[0].type
+    let idInterno = null
+
+    let url = `${this.webhookEvent.message.attachments[0].payload.url}` // url do arquivo caso exista 
+
+    console.log("URLL", url);
+    
+    let atendente = null // id do atendente
+    let fila = 2
+    let lat = null
+    let lng = null
+    let phone = null
+    let celular = null
+
+    let _data = {
+      empresa_id: 18,
+      phone: phone,
+      bot: bot,
+      mensagem: null,
+      bot_url: "http://dev.controldesk.com.br:5007",
+      channel: channel,
+      atendente: atendente,
+      fila: fila,
+      cliente: this.user.name,
+      tipo: tipo,
+      id_interno: idInterno,
+      url: url,
+      lat: lat,
+      lng: lng,
+      celular: null,
+      timestamp: null,
+      options: [],
+      instagram_id: this.user.id,
+      platform_id: 1,
+      profile_pic: this.user.profile_pic
+    }
+
+    console.log('Execute AXIOS ARQUIVO');
+    axios({
+      method: 'post',
+      url: `${CONTROLDESK_HOST}/api/hook`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: _data
+    }).then().catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
+    console.log('Finish AXIOS ARQUIVO');
 
     return response;
   }
@@ -262,7 +317,7 @@ module.exports = class Receive {
   }
 
   handlePayload(payload) {
-    console.log(`Received Payload: ${payload} for user ${this.user.id}`);
+    // console.log(`Received Payload: ${payload} for user ${this.user.id}`);
 
     let response;
 
@@ -307,7 +362,7 @@ module.exports = class Receive {
     GraphApi.callSendApi(requestBody);
   }
 
-  sendMessage(response, delay = 0) {  
+  sendMessage(response, delay = 0) {
     // Check if there is delay in the response
     if ("delay" in response) {
       delay = response["delay"];
