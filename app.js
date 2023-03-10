@@ -191,6 +191,9 @@ app.post("/sendMessage", (req, res) => {
       // Iterate over webhook events - there may be multiple
       entry.messaging.forEach(async function(webhookEvent) {
         // Discard uninteresting events
+
+        console.log("webhookEvent", webhookEvent);
+        
         if (
           "message" in webhookEvent &&
           webhookEvent.message.is_echo === true
@@ -217,6 +220,7 @@ app.post("/sendMessage", (req, res) => {
         console.log(users[senderIgsid]);
 
         let receiveMessage = new Receive(users[senderIgsid], webhookEvent);
+        
         console.log('SennnnnnF Userrrrr');
         return receiveMessage.sendMessageUser();
       });

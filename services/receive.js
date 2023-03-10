@@ -33,17 +33,46 @@ module.exports = class Receive {
 
   // Envia Mensagem
   sendMessageUser() {
+
     let event = this.webhookEvent;
 
-    let response = {
-      text: event.message.text
-    };
-    this.sendMessage(response, 5);
+    let type = event.message?.attachment?.type !== undefined 
+      ? event.message.attachment.type : event.message.type;
+
+      
+    console.log("EVENT", type);
+
+    if (type !== 'text') {
+      
+      console.log("VEIO UM ", type);
+      //console.log("event.message.tipo", event.message.attachment.type);
+      //console.log("event.message.url", event.message.attachment.payload.url);
+
+      let response = {
+        attachment:
+          {
+            type: event.message.attachment.type,
+            payload:
+              {
+                url: event.message.attachment.payload.url
+              },
+          }
+      };
+      this.sendMessage(response, 5);
+    } else {
+      console.log("VEIO UM TEXTO");
+
+      let response = {
+        text: event.message.text
+      };
+      this.sendMessage(response, 5);
+    }
+
   }
 
   // Check if the event is a message or postback and
   // call the appropriate handler function
-  handleMessage() {
+  async handleMessage() {
     let event = this.webhookEvent;
 
     // console.log("handleMessage", event);
@@ -58,7 +87,7 @@ module.exports = class Receive {
         } else if (message.quick_reply) {
           responses = this.handleQuickReply();
         } else if (message.attachments) {
-          responses = this.handleAttachmentMessage();
+          responses = await this.handleAttachmentMessage();
         } else if (message.text) {
           responses = this.handleTextMessage();
         }
@@ -75,9 +104,11 @@ module.exports = class Receive {
       };
     }
 
+    console.log("RESPONNNNNNNNNNNNNNNNSE", responses);
     if (!responses) {
       return;
     }
+    console.log("RESPONNNNNNNNNNNNNNNNSE", responses);
 
     if (Array.isArray(responses)) {
       let delay = 0;
@@ -173,25 +204,25 @@ module.exports = class Receive {
     let lat = null
     let lng = null
     let phone = null
-    let celular = null
 
-    // console.log('this.user.name', this.user.name);
+    console.log("EDITADA", this.webhookEvent.message.text.trim());
+    console.log("EDITADA", this.webhookEvent.message.text.trim());
 
     let _data = {
       empresa_id: 18,
-      phone: phone,
-      bot: bot,
-      mensagem: message,
+      phone,
+      bot,
+      mensagem: this.webhookEvent.message.text.trim(),
       bot_url: "http://dev.controldesk.com.br:5007",
-      channel: channel,
+      channel,
       atendente: atendente,
-      fila: fila,
+      fila,
       cliente: this.user.name,
-      tipo: tipo,
+      tipo,
       id_interno: idInterno,
-      url: url,
-      lat: lat,
-      lng: lng,
+      url,
+      lat,
+      lng,
       celular: null,
       timestamp: null,
       options: [],
@@ -211,25 +242,15 @@ module.exports = class Receive {
     }).then().catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
     console.log('Finish AXIOS');
 
-    return response;
+    return;
   }
   // Handle mesage events with attachments
   async handleAttachmentMessage() {
-    let response;
 
     // Get the attachment
     let attachment = this.webhookEvent.message.attachments[0];
     console.log("Received attachment:", `${attachment} for ${this.user.id}`);
 
-    /*response = Response.genQuickReply(i18n.__("fallback.attachment"), [{
-        title: i18n.__("menu.help"),
-        payload: "CARE_HELP"
-      },
-      {
-        title: i18n.__("menu.start_over"),
-        payload: "GET_STARTED"
-      }
-    ]);*/
     // Aciona o BackEnd pra adicionar a mensagem ao control
     console.log('this.webhookEvent.bot', this.webhookEvent.bot);
     let bot = this.webhookEvent.bot ? this.webhookEvent.bot : false
@@ -246,23 +267,22 @@ module.exports = class Receive {
     let lat = null
     let lng = null
     let phone = null
-    let celular = null
 
     let _data = {
       empresa_id: 18,
-      phone: phone,
-      bot: bot,
+      phone,
+      bot,
       mensagem: null,
       bot_url: "http://dev.controldesk.com.br:5007",
-      channel: channel,
+      channel,
       atendente: atendente,
-      fila: fila,
+      fila,
       cliente: this.user.name,
-      tipo: tipo,
+      tipo,
       id_interno: idInterno,
-      url: url,
-      lat: lat,
-      lng: lng,
+      url,
+      lat,
+      lng,
       celular: null,
       timestamp: null,
       options: [],
@@ -282,7 +302,7 @@ module.exports = class Receive {
     }).then().catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
     console.log('Finish AXIOS ARQUIVO');
 
-    return response;
+    return;
   }
 
   // Handle mesage events with quick replies
