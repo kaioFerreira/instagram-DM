@@ -22,7 +22,15 @@ const express = require("express"),
 const cors = require("cors");
 
 // Object to store known users.
-let users = {};
+// let agenciaUser = new User('17841409546930920');
+// agenciaUser.name = "Agencia Ultrafoco"
+// agenciaUser.username = agenciaultrafoco
+// agenciaUser.profile_pic = ''
+// users['17841409546930920'] = agenciaUser
+
+let users = {  };
+
+let echoMessages = []
 
 app.use(cors());
 // Parse application/x-www-form-urlencoded
@@ -118,10 +126,8 @@ app.post("/sendMessage", (req, res) => {
   console.dir(body, { depth: null });
 
   // Check if this is an event from a page subscription
-  if (body.object === "instagram") {
-    // Return a '200 OK' response to all requests
-    res.status(200).send("EVENT_RECEIVED");
-
+  if (body.object === "page") {
+    
     // Iterate over each entry - there may be multiple if batched
     body.entry.forEach(async function(entry) {
       // Handle Page Changes event
@@ -177,9 +183,10 @@ app.post("/sendMessage", (req, res) => {
         return receiveMessage.handleMessage();
       });
     });
-  } else if (body.object === "page") {
-    // Return a '200 OK' response to all requests
+
+    // Return a '200 OK'
     res.status(200).send("EVENT_RECEIVED");
+  } else if (body.object === "instagram") {
 
     body.entry.forEach(async function(entry) {
 
@@ -190,8 +197,6 @@ app.post("/sendMessage", (req, res) => {
 
       // Iterate over webhook events - there may be multiple
       entry.messaging.forEach(async function(webhookEvent) {
-        // Discard uninteresting events
-
         console.log("webhookEvent", webhookEvent);
         
         if (
@@ -222,12 +227,18 @@ app.post("/sendMessage", (req, res) => {
         let receiveMessage = new Receive(users[senderIgsid], webhookEvent);
         
         console.log('SennnnnnF Userrrrr');
-        return receiveMessage.sendMessageUser();
+        let idMessage = await receiveMessage.sendMessageUser();
+
+        echoMessages.push(idMessage);
+        console.log('echoMessages', echoMessages);
+        
       });
     });
     console.log(
       `Received Messenger "page" object instead of "instagram" message webhook.`
     );
+    // Return a '200 OK'
+    res.status(200).send("EVENT_RECEIVED");
   } else {
     // Return a '404 Not Found' if event is not recognized
     console.warn(`Unrecognized POST to webhook.`);
@@ -244,8 +255,6 @@ app.post("/webhook", (req, res) => {
 
   // Check if this is an event from a page subscription
   if (body.object === "instagram") {
-    // Return a '200 OK' response to all requests
-    res.status(200).send("EVENT_RECEIVED");
 
     // Iterate over each entry - there may be multiple if batched
     body.entry.forEach(async function(entry) {
@@ -273,36 +282,59 @@ app.post("/webhook", (req, res) => {
           webhookEvent.message.is_echo === true
         ) {
           console.log("Got an echo");
-          return;
+          console.log('echoMESSAGESSSSSSSSSS', echoMessages);
+          console.log('MESSAGESSSSSSSSSS', webhookEvent.message.mid);
+
+          if(echoMessages.find(item => item === webhookEvent.message.mid)){
+            console.log("ECHO MESSAGE S2");
+            return;
+          }
         }
 
-        // Get the sender IGSID
-        let senderIgsid = webhookEvent.sender.id;
-        console.log("senderIgsid", senderIgsid);
+        console.log("Got an echo 2222");
 
         console.log("Usuarios Registrados", users);
 
-        if (!(senderIgsid in users)) {
+        // 17841409546930920 IGID AgenciaUltrafoco
+        let idClienteUser = webhookEvent.sender.id
+        if (idClienteUser ===  '17841409546930920'){
+          idClienteUser = webhookEvent.recipient.id
+        }
+        
+        // Get the idClienteUser IGSID
+        console.log("idClienteUser", idClienteUser);
+
+        if (!(idClienteUser in users)) {
           // First time seeing this user
-          let user = new User(senderIgsid);
-          let userProfile = await GraphApi.getUserProfile(senderIgsid);
+
+          let user = new User(idClienteUser);
+          let userProfile = await GraphApi.getUserProfile(idClienteUser);
+          // 17841409546930920
           console.log("userProfile", userProfile);
           if (userProfile) {
             user.setProfile(userProfile);
-            users[senderIgsid] = user;
+            users[idClienteUser] = user;
             console.log(`Created new user profile`);
             console.dir(user);
           }
         }
         console.log("User a FRENTE");
-        console.log(users[senderIgsid]);
-        let receiveMessage = new Receive(users[senderIgsid], webhookEvent);
+        console.log(users[idClienteUser]);
+        let receiveMessage = new Receive(users[idClienteUser], webhookEvent);
+
+        if ('17841409546930920' === webhookEvent.sender.id){
+          return receiveMessage.handleTextMessage(true);
+        }
         return receiveMessage.handleMessage();
       });
     });
-  } else if (body.object === "page") {
-    // Return a '200 OK' response to all requests
+
+    console.log('KAIOOOOOOOOOOOOOOOOOOOOOOOOOOO');
+    // Return a '200 OK'
     res.status(200).send("EVENT_RECEIVED");
+  } else if (body.object === "page") {
+    console.log("VEIO UM PAAAAAAAAAAAAAGE!");
+    return;
 
     body.entry.forEach(async function(entry) {
       // Handle Page Changes event
@@ -355,6 +387,9 @@ app.post("/webhook", (req, res) => {
     console.log(
       `Received Messenger "page" object instead of "instagram" message webhook.`
     );
+
+     // Return a '200 OK'
+     res.status(200).send("EVENT_RECEIVED");
   } else {
     // Return a '404 Not Found' if event is not recognized
     console.warn(`Unrecognized POST to webhook.`);

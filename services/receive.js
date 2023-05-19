@@ -32,7 +32,7 @@ module.exports = class Receive {
   }
 
   // Envia Mensagem
-  sendMessageUser() {
+  async sendMessageUser() {
 
     let event = this.webhookEvent;
 
@@ -65,7 +65,7 @@ module.exports = class Receive {
       let response = {
         text: event.message.text
       };
-      this.sendMessage(response, 5);
+      return await this.sendMessage(response, 5);
     }
 
   }
@@ -88,6 +88,9 @@ module.exports = class Receive {
           responses = this.handleQuickReply();
         } else if (message.attachments) {
           responses = await this.handleAttachmentMessage();
+        } else if (message.reply_to) {
+          console.log("RESPOSTA DE STORY");
+          responses = await this.handleReplyToMessage();
         } else if (message.text) {
           responses = this.handleTextMessage();
         }
@@ -130,53 +133,54 @@ module.exports = class Receive {
   */
 
   // Handles messages events with text
-  handleTextMessage() {
-    console.log(`Received text from User: '${this.user.name}' Id: (${this.user.id}) \nMessage: ${this.webhookEvent.message.text}`);
+  handleTextMessage(empresa) {
+    // console.log(`Received text from User: '${this.user.name}' Id: (${this.user.id}) \nMessage: ${this.webhookEvent.message.text}`);
 
     let message = this.webhookEvent.message.text.trim().toLowerCase();
 
-    let response;
+    let response = undefined;
 
-    if (
-      message.includes("start over") ||
-      message.includes("get started") ||
-      message.includes("hi")
-    ) {
-      response = Response.genNuxMessage(this.user);
-    } else if (Number(message)) {
-      // Assume numeric input ("123") to be an order number
-      response = Order.handlePayload("ORDER_NUMBER");
-    } else if (message.includes("#")) {
-      // Input with # is treated as a suggestion
-      response = Survey.handlePayload("CSAT_SUGGESTION");
-    } else if (message.includes(i18n.__("care.help").toLowerCase())) {
-      let care = new Care(this.user, this.webhookEvent);
-      response = care.handlePayload("CARE_HELP");
-    } else if (message.includes("alertaVirtual")) {
-      response = [
-        Response.genText(
-          i18n.__("fallback.any", {
-            message: this.webhookEvent.message.text
-          })
-        ),
-        Response.genText(i18n.__("get_started.guidance")),
-        Response.genQuickReply(i18n.__("get_started.help"), [{
-            title: i18n.__("menu.suggestion"),
-            payload: "CURATION"
-          },
-          {
-            title: i18n.__("menu.help"),
-            payload: "CARE_HELP"
-          },
-          {
-            title: i18n.__("menu.start_over"),
-            payload: "GET_STARTED"
-          }
-        ])
-      ];
-    } else {
-      response = undefined;
+    if(!empresa){
+      if (
+        message.includes("start over") ||
+        message.includes("get started") ||
+        message.includes("hi")
+      ) {
+        response = Response.genNuxMessage(this.user);
+      } else if (Number(message)) {
+        // Assume numeric input ("123") to be an order number
+        response = Order.handlePayload("ORDER_NUMBER");
+      } else if (message.includes("#")) {
+        // Input with # is treated as a suggestion
+        response = Survey.handlePayload("CSAT_SUGGESTION");
+      } else if (message.includes(i18n.__("care.help").toLowerCase())) {
+        let care = new Care(this.user, this.webhookEvent);
+        response = care.handlePayload("CARE_HELP");
+      } else if (message.includes("alertaVirtual")) {
+        response = [
+          Response.genText(
+            i18n.__("fallback.any", {
+              message: this.webhookEvent.message.text
+            })
+          ),
+          Response.genText(i18n.__("get_started.guidance")),
+          Response.genQuickReply(i18n.__("get_started.help"), [{
+              title: i18n.__("menu.suggestion"),
+              payload: "CURATION"
+            },
+            {
+              title: i18n.__("menu.help"),
+              payload: "CARE_HELP"
+            },
+            {
+              title: i18n.__("menu.start_over"),
+              payload: "GET_STARTED"
+            }
+          ])
+        ];
+      }
     }
+
     // console.log("KAIO RESPONSE", response);
     /*{
        empresa_id: '4',
@@ -193,7 +197,7 @@ module.exports = class Receive {
      }*/
 
     // Aciona o BackEnd pra adicionar a mensagem ao control
-    console.log('this.webhookEvent.bot', this.webhookEvent.bot);
+    console.log('this.webhookEvent.bot', this.webhookEvent);
     let bot = this.webhookEvent.bot ? this.webhookEvent.bot : false
     let channel = 401 // id da fila
     let tipo = "text"
@@ -204,9 +208,6 @@ module.exports = class Receive {
     let lat = null
     let lng = null
     let phone = null
-
-    console.log("EDITADA", this.webhookEvent.message.text.trim());
-    console.log("EDITADA", this.webhookEvent.message.text.trim());
 
     let _data = {
       empresa_id: 18,
@@ -228,7 +229,11 @@ module.exports = class Receive {
       options: [],
       instagram_id: this.user.id,
       platform_id: 1,
-      profile_pic: this.user.profile_pic
+      profile_pic: this.user.profile_pic,
+    }
+
+    if (empresa) {
+      _data['celular'] = 1
     }
 
     console.log('Execute AXIOS');
@@ -242,7 +247,7 @@ module.exports = class Receive {
     }).then().catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
     console.log('Finish AXIOS');
 
-    return;
+    return response;
   }
   // Handle mesage events with attachments
   async handleAttachmentMessage() {
@@ -256,7 +261,7 @@ module.exports = class Receive {
     let bot = this.webhookEvent.bot ? this.webhookEvent.bot : false
     let channel = 401 // id da fila
     let tipo = this.webhookEvent.message.attachments[0].type === 'image' ? 'img' : this.webhookEvent.message.attachments[0].type
-    let idInterno = null
+    let idInterno = uuidv4()
 
     let url = `${this.webhookEvent.message.attachments[0].payload.url}` // url do arquivo caso exista 
 
@@ -301,6 +306,69 @@ module.exports = class Receive {
       data: _data
     }).then().catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
     console.log('Finish AXIOS ARQUIVO');
+
+    return;
+  }
+
+  // Handle mesage events with attachments
+  async handleReplyToMessage() {
+
+    // Get the attachment
+    let reply_to = this.webhookEvent.message.reply_to.id;
+    console.log("Received ReplyTo:", `${reply_to} for ${this.user.id}`);
+
+    // Aciona o BackEnd pra adicionar a mensagem ao control
+    console.log('this.webhookEvent.bot', this.webhookEvent.bot);
+    let bot = this.webhookEvent.bot ? this.webhookEvent.bot : false
+    let channel = 401 // id da fila
+    let tipo = 'reply_to'
+    let idInterno = uuidv4()
+
+    let url = `${this.webhookEvent.message.reply_to.story.url}` // url do arquivo caso exista 
+    let texto = `${this.webhookEvent.message.text}` // texto da resposta do story 
+
+    console.log("URLL ReplyTo", url);
+    console.log("TEXTO ReplyTo", texto);
+    
+    let atendente = null // id do atendente
+    let fila = 2
+    let lat = null
+    let lng = null
+    let phone = null
+
+    let _data = {
+      empresa_id: 18,
+      phone,
+      bot,
+      mensagem: texto,
+      bot_url: "http://dev.controldesk.com.br:5007",
+      channel,
+      atendente: atendente,
+      fila,
+      cliente: this.user.name,
+      tipo,
+      id_interno: idInterno,
+      url,
+      lat,
+      lng,
+      celular: null,
+      timestamp: null,
+      options: [],
+      instagram_id: this.user.id,
+      platform_id: 1,
+      profile_pic: this.user.profile_pic
+    }
+
+    console.log('Execute AXIOS REPLY TO');
+    axios({
+      method: 'post',
+      url: `${CONTROLDESK_HOST}/api/hook`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: _data
+    }).then().catch((err) => console.error('Erro ao mandar msg para o controldesk', err));
+    console.log('Finish AXIOS REPLY TO');
 
     return;
   }
@@ -382,7 +450,7 @@ module.exports = class Receive {
     GraphApi.callSendApi(requestBody);
   }
 
-  sendMessage(response, delay = 0) {
+  async sendMessage(response, delay = 0) {
     // Check if there is delay in the response
     if ("delay" in response) {
       delay = response["delay"];
@@ -390,13 +458,14 @@ module.exports = class Receive {
     }
 
     // Construct the message body
-    let requestBody = {
+    let requestBody = { 
       recipient: {
         id: this.user.id
       },
       message: response
     };
 
-    setTimeout(() => GraphApi.callSendApi(requestBody), delay);
+    return await GraphApi.callSendApi(requestBody);
+    console.log('idMsgSend', idMsgSend);
   }
 };

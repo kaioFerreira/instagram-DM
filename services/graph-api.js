@@ -11,6 +11,7 @@
 "use strict";
 
 // Import dependencies
+const axios = require('axios');
 const config = require("./config"),
   fetch = require("node-fetch"),
   {
@@ -22,20 +23,32 @@ module.exports = class GraphApi {
   static async callSendApi(requestBody) {
     // console.log("requestBody", requestBody);
 
-    let url = new URL(`${config.apiUrl}/me/messages`);
-    url.search = new URLSearchParams({
+    const url = `${config.apiUrl}/me/messages`;
+    const params = new URLSearchParams({
       access_token: config.pageAccesToken
     });
-    let response = await fetch(url, {
-      method: "POST",
+    let idMessage = await axios.post(url, requestBody, {
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(requestBody)
-    });
+      params: params
+    })
+      .then(response => {
+        // Manipule a resposta aqui
+        console.log('SEND Response kaio', response.data.message_id);
+        return response.data.message_id;
+      })
+      .catch(error => {
+        // Manipule erros aqui
+        console.error(error);
+      });
+      
+    return idMessage;
+
     if (!response.ok) {
       console.warn(`Could not sent message.`, response);
     }
+
   }
 
   static async getUserProfile(senderIgsid) {
